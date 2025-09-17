@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>报名审核</title>
+    <!-- 引入layuimini和Layui资源（需确保路径与项目一致） -->
+    <link rel="stylesheet" href="../css/layuimini.css" media="all">
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
+    <script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="../js/layuimini.js" charset="utf-8"></script>
+    <style>
+        /* 自定义审核状态标签样式 */
+        .audit-status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #fff;
+        }
+        .status-wait { background-color: #FFB800; } /* 待审核-黄色 */
+        .status-pass { background-color: #52C41A; } /* 已通过-绿色 */
+        .status-reject { background-color: #F5222D; } /* 已拒绝-红色 */
+    </style>
+</head>
+<body class="layui-layout-body">
+<!-- 主内容区（直接嵌入左侧“报名审核”对应的页面） -->
+<div class="layuimini-main">
+    <!-- 筛选搜索栏 -->
+    <div class="layui-card">
+        <div class="layui-card-header">筛选条件</div>
+        <div class="layui-card-body">
+            <form class="layui-form layui-form-pane" lay-filter="searchForm">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">活动名称</label>
+                        <div class="layui-input-inline" style="width: 200px;">
+                            <input type="text" name="activityName" placeholder="请输入活动名称" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">学生姓名</label>
+                        <div class="layui-input-inline" style="width: 150px;">
+                            <input type="text" name="studentName" placeholder="请输入学生姓名" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">报名时间</label>
+                        <div class="layui-input-inline" style="width: 220px;">
+                            <input type="text" class="layui-input" id="signupTimeRange" placeholder="选择报名时间范围">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-normal" type="submit">搜索</button>
+                        <button class="layui-btn layui-btn-primary" type="button" id="resetBtn">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 工具栏（批量审核） -->
+    <div class="layui-btn-container" style="margin: 10px 0;">
+        <button class="layui-btn layui-btn-sm layui-btn-normal" id="batchPassBtn">批量通过</button>
+        <button class="layui-btn layui-btn-sm layui-btn-danger" id="batchRejectBtn">批量拒绝</button>
+        <button class="layui-btn layui-btn-sm layui-btn-primary" id="refreshBtn">刷新列表</button>
+    </div>
+
+    <!-- 审核列表表格 -->
+    <table class="layui-hide" id="auditTable" lay-filter="auditTableFilter"></table>
+
+    <!-- 审核操作弹窗（通过/拒绝） -->
+    <script type="text/html" id="auditModal">
+        <form class="layui-form layui-form-pane" lay-filter="auditForm">
+            <input type="hidden" name="applyId"> <!-- 报名记录ID（隐藏） -->
+            <div class="layui-form-item">
+                <label class="layui-form-label">审核结果</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="auditResult" value="pass" title="通过" checked>
+                    <input type="radio" name="auditResult" value="reject" title="拒绝">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">审核备注</label>
+                <div class="layui-input-block">
+                    <textarea name="auditRemark" placeholder="请输入审核备注（选填）" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <button class="layui-btn layui-btn-normal" type="submit">提交审核</button>
+                <button class="layui-btn layui-btn-primary" type="button" id="closeModalBtn">取消</button>
+            </div>
+        </form>
+    </script>
+
+    <!-- 审核状态列模板 -->
+    <script type="text/html" id="auditStatusTpl">
+        {{#  if(d.auditStatus === 'wait'){ }}
+            <span class="audit-status status-wait">待审核</span>
+        {{#  } else if(d.auditStatus === 'pass'){ }}
+            <span class="audit-status status-pass">已通过</span>
+        {{#  } else if(d.auditStatus === 'reject'){ }}
+            <span class="audit-status status-reject">已拒绝</span>
+        {{#  } }}
+    </script>
+
+    <!-- 操作列模板 -->
+    <script type="text/html" id="auditOperationTpl">
+        {{#  if(d.auditStatus === 'wait'){ }}
+            <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="audit">审核</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">删除</a>
+        {{#  } else { }}
+            <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="view">查看详情</a>
+        {{#  } }}
+    </script>
+</div>
+
+<script>
+layui.use(['form', 'table', 'laydate', 'layer', 'jquery'], function () {
+    var form = layui.form,
+        table = layui.table,
+        laydate = layui.laydate,
+        layer = layui.layer,
+        $ = layui.jquery;
+
+    // 1. 初始化日期范围选择器（报名时间筛选）
+    laydate.render({
+        elem: '#signupTimeRange',
+        range: true, // 开启范围选择
+        format: 'yyyy-MM-dd', // 日期格式
+        placeholder: '选择报名时间范围'
+    });
+
+    // 2. 渲染审核列表表格
+    table.render({
+        elem: '#auditTable',
+        url: 'audit-wait.json', // 待审核数据接口（需与项目后端接口一致）
+        page: true, // 启用分页
+        limit: 10, // 每页默认10条
+        limits: [10, 15, 20, 25],
+        cols: [[
+            {type: 'checkbox', width: 50}, // 复选框（批量操作用）
+            {field: 'applyId', width: 80, title: '报名ID', sort: true}, // 报名记录ID
+            {field: 'activityName', width: 220, title: '活动名称'}, // 活动名称
+            {field: 'clubName', width: 150, title: '举办社团'}, // 发起社团
+            {field: 'studentName', width: 100, title: '学生姓名'}, // 报名学生姓名
+            {field: 'studentDept', width: 150, title: '学生院系'}, // 学生院系
+            {field: 'signupTime', width: 180, title: '报名时间', sort: true}, // 报名时间
+            {field: 'auditStatus', width: 120, title: '审核状态', templet: '#auditStatusTpl', align: 'center'}, // 审核状态
+            {field: 'auditRemark', width: 180, title: '审核备注'}, // 审核备注
+            {title: '操作', width: 120, templet: '#auditOperationTpl', align: 'center'} // 操作列
+        ]],
+        skin: 'line', // 表格边框样式
+        done: function(res, curr, count) {
+            // 表格渲染完成后，可添加统计等逻辑
+            console.log('待审核记录总数：', count);
+        }
+    });
+
+    // 3. 搜索表单提交（筛选功能）
+    form.on('submit(searchForm)', function(data) {
+        // 模拟筛选逻辑（实际需传参到后端接口）
+        var field = data.field;
+        layer.msg('筛选条件：' + JSON.stringify(field), {icon: 1});
+        
+        // 重新渲染表格（携带筛选参数）
+        table.reload('auditTable', {
+            where: field, // 筛选参数
+            page: {curr: 1} // 重置到第1页
+        });
+        return false; // 阻止表单默认提交
+    });
+
+    // 4. 重置筛选表单
+    $('#resetBtn').on('click', function() {
+        form.val('searchForm', {
+            'activityName': '',
+            'studentName': '',
+            'signupTimeRange': ''
+        });
+        // 重置日期选择器
+        $('#signupTimeRange').val('');
+    });
+
+    // 5. 刷新列表
+    $('#refreshBtn').on('click', function() {
+        table.reload('auditTable');
+        layer.msg('列表已刷新', {icon: 1});
+    });
+
+    // 6. 批量通过审核
+    $('#batchPassBtn').on('click', function() {
+        var checkStatus = table.checkStatus('auditTable');
+        var data = checkStatus.data;
+        if (data.length === 0) {
+            layer.msg('请先选择要通过的报名记录', {icon: 2});
+            return;
+        }
+        // 收集选中的报名ID
+        var applyIds = data.map(item => item.applyId).join(',');
+        layer.confirm('确认批量通过选中的 ' + data.length + ' 条报名记录？', {icon: 3}, function(index) {
+            // 实际需调用后端接口提交审核
+            layer.msg('批量通过成功！', {icon: 1});
+            // 刷新列表
+            table.reload('auditTable');
+            layer.close(index);
+        });
+    });
+
+    // 7. 批量拒绝审核
+    $('#batchRejectBtn').on('click', function() {
+        var checkStatus = table.checkStatus('auditTable');
+        var data = checkStatus.data;
+        if (data.length === 0) {
+            layer.msg('请先选择要拒绝的报名记录', {icon: 2});
+            return;
+        }
+        // 收集选中的报名ID
+        var applyIds = data.map(item => item.applyId).join(',');
+        layer.prompt({
+            title: '批量拒绝备注',
+            formType: 2, // 文本域
+            placeholder: '请输入拒绝原因（选填）'
+        }, function(remark, index) {
+            // 实际需调用后端接口提交审核
+            layer.msg('批量拒绝成功！', {icon: 1});
+            // 刷新列表
+            table.reload('auditTable');
+            layer.close(index);
+        });
+    });
+
+    // 8. 表格行操作监听（审核/删除/查看）
+    table.on('tool(auditTableFilter)', function(obj) {
+        var data = obj.data; // 当前行数据
+        if (obj.event === 'audit') { // 单个审核
+            // 打开审核弹窗
+            var auditIndex = layer.open({
+                title: '审核报名记录',
+                type: 1,
+                area: ['500px', '350px'],
+                content: $('#auditModal').html(), // 加载弹窗模板
+                success: function(layero, index) {
+                    // 填充报名ID到表单
+                    form.val('auditForm', {
+                        'applyId': data.applyId
+                    });
+                    // 重新渲染表单（Layui表单需手动渲染）
+                    form.render();
+                }
+            });
+        } else if (obj.event === 'delete') { // 删除待审核记录
+            layer.confirm('确认删除这条待审核报名记录？', {icon: 3}, function(index) {
+                // 实际需调用后端接口删除
+                obj.del(); // 前端删除当前行
+                layer.msg('删除成功！', {icon: 1});
+                layer.close(index);
+            });
+        } else if (obj.event === 'view') { // 查看已审核详情
+            // 打开详情弹窗
+            layer.open({
+                title: '报名审核详情',
+                type: 1,
+                area: ['600px', '480px'],
+                shade: 0.2,
+                shadeClose: false,
+                content: `
+                    <div style="padding: 20px;">
+                        <table class="layui-table" style="margin: 0;">
+                            <colgroup>
+                                <col width="120">
+                                <col width="auto">
+                            </colgroup>
+                            <tbody>
+                                <tr><td>报名ID</td><td>${data.applyId || '无'}</td></tr>
+                                <tr><td>活动名称</td><td style="word-break: break-all;">${data.activityName || '无'}</td></tr>
+                                <tr><td>举办社团</td><td>${data.clubName || '无'}</td></tr>
+                                <tr><td>学生姓名</td><td>${data.studentName || '无'}</td></tr>
+                                <tr><td>学生院系</td><td>${data.studentDept || '无'}</td></tr>
+                                <tr><td>学生学号</td><td>${data.studentNo || '未填写'}</td></tr>
+                                <tr><td>联系电话</td><td>${data.studentPhone || '未填写'}</td></tr>
+                                <tr><td>报名时间</td><td>${data.signupTime || '无'}</td></tr>
+                                <tr><td>报名备注</td><td style="word-break: break-all;">${data.signupRemark || '无'}</td></tr>
+                                <tr><td>审核状态</td><td>
+                                    ${data.auditStatus === 'pass' 
+                                        ? '<span class="audit-status status-pass">已通过</span>' 
+                                        : '<span class="audit-status status-reject">已拒绝</span>'
+                                    }
+                                </td></tr>
+                                <tr><td>审核时间</td><td>${data.auditTime || '无'}</td></tr>
+                                <tr><td>审核备注</td><td style="word-break: break-all;">${data.auditRemark || '无'}</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `,
+                btn: ['关闭'],
+                btnAlign: 'c',
+                btn1: function(index) {
+                    layer.close(index);
+                }
+            });
+        }
+    });
+
+    // 9. 审核表单提交（单个审核操作）
+    form.on('submit(auditForm)', function(data) {
+        var field = data.field;
+        // 模拟审核提交逻辑（实际需调用后端接口）
+        layer.confirm(`确认${field.auditResult === 'pass' ? '通过' : '拒绝'}该报名记录？`, {icon: 3}, function(index) {
+            // 关闭审核弹窗
+            layer.closeAll('page');
+            // 提示审核结果
+            layer.msg(`审核${field.auditResult === 'pass' ? '通过' : '拒绝'}成功！`, {icon: 1});
+            // 刷新列表
+            table.reload('auditTable');
+            layer.close(index);
+        });
+        return false; // 阻止表单默认提交
+    });
+
+    // 10. 关闭审核弹窗
+    $(document).on('click', '#closeModalBtn', function() {
+        layer.closeAll('page');
+    });
+
+    // 11. 解决Layui表单动态渲染问题
+    form.render();
+});
+</script>
+</body>
+</html>

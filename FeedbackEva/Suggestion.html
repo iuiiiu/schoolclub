@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>建议反馈</title>
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css">
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        .layui-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+            margin: 20px;
+        }
+        .required::before {
+            content: "*";
+            color: #ff5722;
+            margin-right: 4px;
+            font-weight: bold;
+        }
+		.jumpdl{
+			display: block;
+			padding-left: 70px;
+		}
+		.layui-btn{
+			background-color: #b9efef;
+			color:#62523e;
+		}
+    </style>
+</head>
+<body>
+    <div class="layui-form">
+		
+		<div class="layui-form-item">
+		    <label class="layui-form-label required">反馈类型</label>
+		    <div class="layui-input-block">
+		        <select lay-verify="required">
+		            <option value="">请选择反馈类型</option>
+		                      <option value="activity">活动相关</option>
+		                      <option value="club">社团相关</option>
+		                      <option value="system">系统建议</option>
+		                      <option value="other">其他</option>
+		        </select>
+		    </div>
+		</div>
+		
+        <div class="layui-form-item">
+            <label class="layui-form-label required">标题</label>
+            <div class="layui-input-block">
+                <input type="text" name="username" class="layui-input" lay-verify="required"
+                    lay-reqtext="标题不能为空!" placeholder="请输入标题">
+            </div>
+        </div>
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label">内容</label>
+			<div class="layui-input-block">
+				<textarea   name="remark" class="layui-textarea" placeholder="请输入反馈内容"></textarea>
+			</div>
+		
+		<div class="jumpdl">
+		    <div class="layui-btn-container">
+		      <button type="button" class="layui-btn" lay-submit lay-filter="saveBtn">提交反馈</button>
+		    </div>
+		</div>
+    </div>
+	
+    <script src="../lib/layui-v2.6.3/layui.js"></script>
+    <script>
+        layui.use(['form'], function () {
+            var form = layui.form;
+
+            form.on('submit(saveBtn)', function (data) {
+                console.log(data.field);
+                // 这里可以添加表单提交的逻辑，比如 Ajax 提交
+                return false; // 阻止表单跳转提交
+            });
+        });
+    </script>
+</body>
+</html>

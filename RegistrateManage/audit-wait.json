@@ -1,0 +1,127 @@
+{
+  "code": 0,
+  "msg": "success",
+  "count": 12,
+  "data": [
+    {
+      "applyId": 2024001,
+      "activityName": "2024年度校园歌手大赛决赛",
+      "clubName": "音乐爱好者协会",
+      "studentName": "张三",
+      "studentDept": "人文学院",
+      "signupTime": "2024-10-15 09:23:45",
+      "auditStatus": "wait",
+      "auditRemark": "",
+      "studentPhone": "13800138001",
+      "signupRemark": "擅长流行唱法，希望参与决赛表演"
+    },
+    {
+      "applyId": 2024002,
+      "activityName": "Python编程入门 workshop",
+      "clubName": "计算机科技协会",
+      "studentName": "李四",
+      "studentDept": "计算机学院",
+      "signupTime": "2024-10-15 10:15:22",
+      "auditStatus": "wait",
+      "auditRemark": "",
+      "studentPhone": "13900139002",
+      "signupRemark": "零基础，想学习Python基础语法"
+    },
+    {
+      "applyId": 2024003,
+      "activityName": "“环保同行”校园垃圾分类宣传周",
+      "clubName": "绿色环保社",
+      "studentName": "王五",
+      "studentDept": "环境学院",
+      "signupTime": "2024-10-15 11:08:56",
+      "auditStatus": "wait",
+      "auditRemark": "",
+      "studentPhone": "13700137003",
+      "signupRemark": "愿意参与宣传物料分发工作"
+    },
+    {
+      "applyId": 2024004,
+      "activityName": "古典诗词朗诵会",
+      "clubName": "文学社",
+      "studentName": "赵六",
+      "studentDept": "文学院",
+      "signupTime": "2024-10-15 14:30:11",
+      "auditStatus": "wait",
+      "auditRemark": "",
+      "studentPhone": "13600136004",
+      "signupRemark": "准备朗诵《春江花月夜》"
+    },
+    {
+      "applyId": 2024005,
+      "activityName": "校园羽毛球友谊赛",
+      "clubName": "羽毛球社",
+      "studentName": "孙七",
+      "studentDept": "体育学院",
+      "signupTime": "2024-10-15 15:42:33",
+      "auditStatus": "wait",
+      "auditRemark": "",
+      "studentPhone": "13500135005",
+      "signupRemark": "单打选手，有校赛参赛经验"
+    },
+    {
+      "applyId": 2024006,
+      "activityName": "摄影技巧分享与作品征集",
+      "clubName": "摄影社",
+      "studentName": "周八",
+      "studentDept": "艺术学院",
+      "signupTime": "2024-10-15 16:18:07",
+      "auditStatus": "wait",
+      "auditRemark": "",
+      "studentPhone": "13400134006",
+      "signupRemark": "携带单反相机参与，准备分享风光摄影技巧"
+    },
+    {
+      "applyId": 2024007,
+      "activityName": "Java开发实战项目解析",
+      "clubName": "计算机科技协会",
+      "studentName": "吴九",
+      "studentDept": "软件学院",
+      "signupTime": "2024-10-16 08:55:19",
+      "auditStatus": "wait",
+      "auditRemark": "",
+      "studentPhone": "13300133007",
+      "signupRemark": "有Java基础，想学习项目实战经验"
+    },
+    {
+      "applyId": 2024008,
+      "activityName": "“读书月”主题书单推荐会",
+      "clubName": "文学社",
+      "studentName": "郑十",
+      "studentDept": "外语学院",
+      "signupTime": "2024-10-16 09:32:44",
+      "auditStatus": "wait",
+      "auditRemark": "",
+      "studentPhone": "13200132008",
+      "signupRemark": "推荐外国文学类书籍"
+    },
+    {
+      "applyId": 2024009,
+      "activityName": "校园公益植树活动",
+      "clubName": "绿色环保社",
+      "studentName": "钱十一",
+      "studentDept": "生命科学学院",
+      "signupTime": "2024-10-16 10:20:31",
+      "auditStatus": "wait",
+      "auditRemark": "",
+      "studentPhone": "13100131009",
+      "signupRemark": "可参与树苗养护指导"
+    },
+    {
+      "applyId": 2024010,
+      "activityName": "UI设计入门与Figma工具教学",
+      "clubName": "设计协会",
+      "studentName": "冯十二",
+      "studentDept": "设计学院",
+      "signupTime": "2024-10-16 11:05:58",
+      "auditStatus": "wait",
+      "auditRemark": "",
+      "studentPhone": "13000130010",
+      "signupRemark": "有PS基础，想学习UI设计规范"
+    }
+  ]
+}

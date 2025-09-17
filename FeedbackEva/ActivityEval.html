@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>活动评价</title>
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
+    <script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <style>
+        .layui-card { margin: 15px; }
+        .layui-btn-group .layui-btn { margin-right: 5px; }
+        .star {
+            color: #FFB800;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .satisfaction-area {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+        }
+        .satisfaction-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .satisfaction-item label {
+            width: 120px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layuimini-main">
+    <div class="layui-card">
+        <div class="layui-card-header">活动评价筛选</div>
+        <div class="layui-card-body">
+            <form class="layui-form layui-form-pane" lay-filter="evalSearchForm">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">活动名称</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="activityName" placeholder="请输入活动名称" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">举办社团</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="clubName" placeholder="请输入社团名称" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">评价学生</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="studentName" placeholder="请输入姓名" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">评分范围</label>
+                        <div class="layui-input-inline">
+                            <select name="starRange">
+                                <option value="">全部评分</option>
+                                <option value="5">5星</option>
+                                <option value="4">4星</option>
+                                <option value="3">3星</option>
+                                <option value="2">2星</option>
+                                <option value="1">1星</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">评价时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" id="evalTimeRange" placeholder="选择评价时间范围">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-normal" type="submit">搜索</button>
+                        <button class="layui-btn layui-btn-primary" type="reset">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="layui-card">
+        <div class="layui-card-header">
+            <div class="layui-btn-group">
+                <button class="layui-btn layui-btn-sm layui-btn-primary" id="refreshEvalBtn">刷新列表</button>
+                <button class="layui-btn layui-btn-sm layui-btn-normal" id="exportEvalBtn">导出评价数据</button>
+                <button class="layui-btn layui-btn-sm layui-btn-normal" id="addEvalBtn">发表活动评价</button>
+            </div>
+        </div>
+        <div class="layui-card-body">
+            <table class="layui-hide" id="evalTable" lay-filter="evalTableFilter"></table>
+
+            <script type="text/html" id="evalOperationTpl">
+                <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="view">查看详情</a>
+            </script>
+
+            <script type="text/html" id="starTpl">
+                {{#  for(var i=0; i<d.star; i++){ }}
+                    <i class="star">★</i>
+                {{#  } }}
+                {{#  for(var j=0; j<5-d.star; j++){ }}
+                    <i class="star">☆</i>
+                {{#  } }}
+            </script>
+        </div>
+    </div>
+
+    <div id="evalDetailModal" style="display: none; padding: 20px;">
+        <table class="layui-table" style="margin: 0;">
+            <colgroup>
+                <col width="120">
+                <col width="auto">
+            </colgroup>
+            <tbody>
+                <tr><td>评价ID</td><td id="detailEvalId">-</td></tr>
+                <tr><td>活动名称</td><td id="detailActivityName">-</td></tr>
+                <tr><td>举办社团</td><td id="detailClubName">-</td></tr>
+                <tr><td>评价学生</td><td id="detailStudentName">-</td></tr>
+                <tr><td>学生学号</td><td id="detailStudentNo">-</td></tr>
+                <tr><td>评分</td><td id="detailStar">-</td></tr>
+                <tr><td>评价内容</td><td id="detailContent" style="word-break: break-all;"></td></tr>
+                <tr><td>评价时间</td><td id="detailEvalTime">-</td></tr>
+                <tr><td>回复内容</td><td id="detailReply" style="word-break: break-all;"></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="addEvalModal" style="display: none;">
+        <form class="layui-form layui-form-pane" lay-filter="addEvalForm" style="padding: 20px;">
+            <input type="hidden" name="evalId">
+            <div class="layui-form-item">
+                <label class="layui-form-label">活动名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="activityName" required lay-verify="required" placeholder="请输入活动名称" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">举办社团</label>
+                <div class="layui-input-block">
+                    <input type="text" name="clubName" required lay-verify="required" placeholder="请输入社团名称" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">评价学生</label>
+                <div class="layui-input-block">
+                    <input type="text" name="studentName" required lay-verify="required" placeholder="请输入你的姓名" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">学生学号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="studentNo" required lay-verify="required" placeholder="请输入你的学号" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">评分</label>
+                <div class="layui-input-block">
+                    <div class="layui-btn-group">
+                        <input type="radio" name="star" value="1" title="1星" lay-skin="primary">
+                        <input type="radio" name="star" value="2" title="2星" lay-skin="primary">
+                        <input type="radio" name="star" value="3" title="3星" lay-skin="primary">
+                        <input type="radio" name="star" value="4" title="4星" lay-skin="primary">
+                        <input type="radio" name="star" value="5" title="5星" lay-skin="primary" checked>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">评价内容</label>
+                <div class="layui-input-block">
+                    <textarea name="content" required lay-verify="required" placeholder="请输入评价内容" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <button class="layui-btn layui-btn-normal" type="submit">提交评价</button>
+                <button class="layui-btn layui-btn-primary" type="button" id="closeAddModalBtn">取消</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+layui.use(['form', 'table', 'laydate', 'layer', 'jquery'], function () {
+    var form = layui.form,
+        table = layui.table,
+        laydate = layui.laydate,
+        layer = layui.layer,
+        $ = layui.jquery;
+
+    laydate.render({
+        elem: '#evalTimeRange',
+        range: true
+    });
+
+    var mockEvalData = [
+        {evalId: 1, activityName: 'Python编程入门 workshop', clubName: '计算机科技协会', studentName: '张三', studentNo: '2023001', star: 5, content: '活动非常棒，讲师讲解清晰，收获很大！', evalTime: '2024-10-18 16:30:00', reply: '感谢你的认可，我们会继续努力～'},
+        {evalId: 2, activityName: '校园歌手大赛决赛', clubName: '音乐爱好者协会', studentName: '李四', studentNo: '2023002', star: 4, content: '歌手水平都很高，现场氛围很好，就是音响效果可以再优化。', evalTime: '2024-10-20 21:15:22', reply: '收到建议，我们会联系场地调整音响，下次改进～'},
+        {evalId: 3, activityName: '秋季校园篮球赛总决赛', clubName: '篮球社', studentName: '王五', studentNo: '2023003', star: 5, content: '比赛很精彩，组织有序，为选手们点赞！', evalTime: '2024-10-15 17:58:40', reply: '谢谢支持，期待你下次来当志愿者～'},
+        {evalId: 4, activityName: '校园公益植树活动', clubName: '绿色环保社', studentName: '赵六', studentNo: '2023004', star: 3, content: '活动很有意义，但集合时间通知不太及时。', evalTime: '2024-10-19 11:02:33', reply: '抱歉给你带来不便，下次会提前多次通知～'},
+        {evalId: 5, activityName: '古典诗词朗诵会', clubName: '文学社', studentName: '孙七', studentNo: '2023005', star: 5, content: '氛围特别好，感受到了诗词的魅力，希望多举办这类活动！', evalTime: '2024-10-25 19:55:10', reply: '你的支持是我们的动力，后续会策划更多文化活动～'}
+    ];
+
+    function renderEvalTable(filterData = []) {
+        table.render({
+            elem: '#evalTable',
+            data: filterData.length > 0 ? filterData : mockEvalData,
+            page: true,
+            limit: 5,
+            limits: [5, 10, 15],
+            cols: [[
+                {type: 'checkbox', width: 50},
+                {field: 'evalId', width: 80, title: '评价ID', sort: true},
+                {field: 'activityName', width: 220, title: '活动名称'},
+                {field: 'clubName', width: 150, title: '举办社团'},
+                {field: 'studentName', width: 100, title: '评价学生'},
+                {field: 'star', width: 100, title: '评分', templet: '#starTpl', align: 'center'},
+                {field: 'content', width: 300, title: '评价内容'},
+                {field: 'evalTime', width: 200, title: '评价时间'},
+                {title: '操作', width: 120, templet: '#evalOperationTpl', align: 'center'}
+            ]],
+            skin: 'line'
+        });
+    }
+
+    renderEvalTable();
+
+    form.on('submit(evalSearchForm)', function(data) {
+        var field = data.field;
+        var filterResult = mockEvalData.filter(item => {
+            if (field.activityName && !item.activityName.includes(field.activityName)) return false;
+            if (field.clubName && !item.clubName.includes(field.clubName)) return false;
+            if (field.studentName && !item.studentName.includes(field.studentName)) return false;
+            if (field.starRange && item.star != field.starRange) return false;
+            return true;
+        });
+        renderEvalTable(filterResult);
+        layer.msg('筛选完成，共找到' + filterResult.length + '条评价记录', {icon: 1});
+        return false;
+    });
+
+    $('#refreshEvalBtn').on('click', function() {
+        renderEvalTable();
+        layer.msg('列表已刷新', {icon: 1});
+    });
+
+    $('#exportEvalBtn').on('click', function() {
+        layer.msg('模拟导出评价数据', {icon: 1});
+    });
+
+        $('#addEvalBtn').on('click', function() {
+            layer.open({
+                type: 1,
+                title: '发表活动评价',
+                area: ['600px', '500px'], // 适配评价表单高度
+                content: $('#addEvalModal'),
+                shade: 0.2,
+                success: function() {
+                    // 打开弹窗时重新渲染表单（确保单选框、下拉框状态正确）
+                    form.render();
+                    // 重置表单内容（避免残留上次输入数据）
+                    form.val('addEvalForm', {
+                        'activityName': '',
+                        'clubName': '',
+                        'studentName': '',
+                        'studentNo': '',
+                        'star': '5', // 默认选中5星
+                        'content': ''
+                    });
+                }
+            });
+        });
+    
+        // 表格行操作监听（查看详情）
+        table.on('tool(evalTableFilter)', function(obj) {
+            var data = obj.data; // 当前行评价数据
+            if (obj.event === 'view') {
+                // 填充详情弹窗数据
+                $('#detailEvalId').text(data.evalId || '-');
+                $('#detailActivityName').text(data.activityName || '-');
+                $('#detailClubName').text(data.clubName || '-');
+                $('#detailStudentName').text(data.studentName || '-');
+                $('#detailStudentNo').text(data.studentNo || '-');
+                
+                // 渲染评分星星（实心+空心组合）
+                var starHtml = '';
+                for (var i = 0; i < (data.star || 0); i++) {
+                    starHtml += '<i class="star">★</i>';
+                }
+                for (var j = 0; j < 5 - (data.star || 0); j++) {
+                    starHtml += '<i class="star">☆</i>';
+                }
+                starHtml += ' <span>（' + (data.star || 0) + '星）</span>';
+                $('#detailStar').html(starHtml);
+    
+                // 填充文本类数据（处理空值）
+                $('#detailContent').text(data.content || '暂无评价内容');
+                $('#detailEvalTime').text(data.evalTime || '-');
+                $('#detailReply').text(data.reply || '暂无回复');
+    
+                // 打开详情弹窗
+                layer.open({
+                    type: 1,
+                    title: '评价详情',
+                    area: ['600px', '450px'],
+                    content: $('#evalDetailModal'),
+                    shade: 0.2,
+                    btn: ['关闭'],
+                    btnAlign: 'c', // 按钮居中
+                    closeBtn: 1 // 显示关闭按钮
+                });
+            }
+        });
+    
+        // 发表评价表单提交
+        form.on('submit(addEvalForm)', function(data) {
+            var field = data.field; // 表单提交数据
+    
+            // 简单数据校验（避免空值提交）
+            if (!field.activityName.trim()) {
+                layer.msg('请输入活动名称', {icon: 2});
+                return false;
+            }
+            if (!field.clubName.trim()) {
+                layer.msg('请输入举办社团', {icon: 2});
+                return false;
+            }
+            if (!field.studentName.trim()) {
+                layer.msg('请输入你的姓名', {icon: 2});
+                return false;
+            }
+            if (!field.studentNo.trim()) {
+                layer.msg('请输入你的学号', {icon: 2});
+                return false;
+            }
+            if (!field.content.trim()) {
+                layer.msg('请输入评价内容', {icon: 2});
+                return false;
+            }
+    
+            // 补充评价数据（自增ID、当前时间、默认回复状态）
+            field.evalId = mockEvalData.length > 0 
+                ? Math.max(...mockEvalData.map(item => item.evalId)) + 1 
+                : 1;
+            // 使用Layui工具类格式化时间（需确保layui.use引入util）
+            field.evalTime = layui.util.toDateString(new Date().getTime(), 'yyyy-MM-dd HH:mm:ss');
+            field.reply = '待回复';
+    
+            // 添加到模拟数据并刷新表格
+            mockEvalData.push(field);
+            layer.msg('评价提交成功！', {icon: 1, time: 1500});
+            layer.closeAll(); // 关闭所有弹窗
+            renderEvalTable(); // 重新渲染评价列表
+    
+            return false; // 阻止表单默认提交
+        });
+    
+        // 关闭发表评价弹窗按钮
+        $('#closeAddModalBtn').on('click', function() {
+            layer.closeAll();
+        });
+    
+        // 筛选表单重置按钮（若使用type="reset"需补充此逻辑）
+        $('button[type="reset"]').on('click', function() {
+            // 重置日期选择器（Layui日期选择器需手动清空）
+            $('#evalTimeRange').val('');
+            // 重新渲染表单（确保单选/下拉框重置生效）
+            form.render();
+            // 重置后刷新表格（显示全部数据）
+            renderEvalTable();
+        });
+    
+        
+        // 解决Layui表单动态渲染问题（确保单选框、复选框样式正常）
+        form.render();
+    });
+    </script>
+    </body>
+    </html>

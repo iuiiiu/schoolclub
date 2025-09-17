@@ -1,0 +1,187 @@
+{
+  "code": 0,
+  "msg": "",
+  "count": 18,
+  "data": [
+    {
+      "activityId": 1001,
+      "activityName": "2024年度校园歌手大赛决赛",
+      "clubName": "音乐爱好者协会",
+      "activityTime": "2024-10-20 19:00-21:30",
+      "activityLocation": "学校大礼堂",
+      "activityType": "文化艺术类",
+      "signupCount": 238,
+      "status": "1"
+    },
+    {
+      "activityId": 1002,
+      "activityName": "Python编程入门 workshop",
+      "clubName": "计算机科技协会",
+      "activityTime": "2024-10-18 14:00-16:00",
+      "activityLocation": "实验楼B302教室",
+      "activityType": "学术科技类",
+      "signupCount": 89,
+      "status": "1"
+    },
+    {
+      "activityId": 1003,
+      "activityName": "秋季校园篮球赛总决赛",
+      "clubName": "篮球社",
+      "activityTime": "2024-10-15 15:00-17:00",
+      "activityLocation": "学校室外篮球场",
+      "activityType": "体育竞技类",
+      "signupCount": 12,
+      "status": "0"
+    },
+    {
+      "activityId": 1004,
+      "activityName": "“环保同行”校园垃圾分类宣传周",
+      "clubName": "绿色环保社",
+      "activityTime": "2024-10-21至2024-10-27",
+      "activityLocation": "校园主干道、各宿舍楼",
+      "activityType": "公益志愿类",
+      "signupCount": 56,
+      "status": "1"
+    },
+    {
+      "activityId": 1005,
+      "activityName": "古典诗词朗诵会",
+      "clubName": "文学社",
+      "activityTime": "2024-10-25 19:00-21:00",
+      "activityLocation": "图书馆报告厅",
+      "activityType": "文化艺术类",
+      "signupCount": 72,
+      "status": "1"
+    },
+    {
+      "activityId": 1006,
+      "activityName": "大学生创业经验分享会",
+      "clubName": "创业孵化社",
+      "activityTime": "2024-10-16 18:30-20:30",
+      "activityLocation": "行政楼201会议室",
+      "activityType": "学术科技类",
+      "signupCount": 105,
+      "status": "0"
+    },
+    {
+      "activityId": 1007,
+      "activityName": "校园羽毛球友谊赛",
+      "clubName": "羽毛球社",
+      "activityTime": "2024-10-22 9:00-12:00",
+      "activityLocation": "学校室内羽毛球场",
+      "activityType": "体育竞技类",
+      "signupCount": 48,
+      "status": "1"
+    },
+    {
+      "activityId": 1008,
+      "activityName": "“爱心义卖”资助贫困生活动",
+      "clubName": "志愿者协会",
+      "activityTime": "2024-10-19 10:00-16:00",
+      "activityLocation": "校园中心广场",
+      "activityType": "公益志愿类",
+      "signupCount": 63,
+      "status": "0"
+    },
+    {
+      "activityId": 1009,
+      "activityName": "摄影技巧分享与作品征集",
+      "clubName": "摄影社",
+      "activityTime": "2024-10-26 15:00-17:00",
+      "activityLocation": "艺术楼A108教室",
+      "activityType": "文化艺术类",
+      "signupCount": 59,
+      "status": "1"
+    },
+    {
+      "activityId": 1010,
+      "activityName": "Java开发实战项目解析",
+      "clubName": "计算机科技协会",
+      "activityTime": "2024-10-23 19:00-21:00",
+      "activityLocation": "实验楼A205教室",
+      "activityType": "学术科技类",
+      "signupCount": 76,
+      "status": "1"
+    },
+    {
+      "activityId": 1011,
+      "activityName": "校园足球赛小组赛（计算机系VS中文系）",
+      "clubName": "足球社",
+      "activityTime": "2024-10-17 16:00-18:00",
+      "activityLocation": "学校足球场",
+      "activityType": "体育竞技类",
+      "signupCount": 22,
+      "status": "0"
+    },
+    {
+      "activityId": 1012,
+      "activityName": "“读书月”主题书单推荐会",
+      "clubName": "文学社",
+      "activityTime": "2024-10-24 14:00-16:00",
+      "activityLocation": "图书馆3楼阅览室",
+      "activityType": "文化艺术类",
+      "signupCount": 43,
+      "status": "1"
+    },
+    {
+      "activityId": 1013,
+      "activityName": "校园公益植树活动",
+      "clubName": "绿色环保社",
+      "activityTime": "2024-10-28 9:00-11:30",
+      "activityLocation": "校园西侧绿地",
+      "activityType": "公益志愿类",
+      "signupCount": 82,
+      "status": "1"
+    },
+    {
+      "activityId": 1014,
+      "activityName": "UI设计入门与Figma工具教学",
+      "clubName": "设计协会",
+      "activityTime": "2024-10-21 16:00-18:00",
+      "activityLocation": "实验楼C401教室",
+      "activityType": "学术科技类",
+      "signupCount": 67,
+      "status": "1"
+    },
+    {
+      "activityId": 1015,
+      "activityName": "校园乒乓球单打赛",
+      "clubName": "乒乓球社",
+      "activityTime": "2024-10-14 9:00-12:00",
+      "activityLocation": "学校室内乒乓球场",
+      "activityType": "体育竞技类",
+      "signupCount": 35,
+      "status": "0"
+    },
+    {
+    "activityId": 1016,
+    "activityName": "“心理健康” 主题讲座",
+    "clubName": "心理成长社",
+    "activityTime": "2024-10-29 19:00-20:30",
+    "activityLocation": "学校大礼堂分会场",
+    "activityType": "公益志愿类",
+    "signupCount": 112,
+    "status": "1"
+    },
+    {
+    "activityId": 1017,
+    "activityName": "校园街舞大赛初赛",
+    "clubName": "街舞社",
+    "activityTime": "2024-10-30 18:30-21:00",
+    "activityLocation": "学生活动中心一楼大厅",
+    "activityType": "文化艺术类",
+    "signupCount": 45,
+    "status": "1"
+    },
+    {
+    "activityId": 1018,
+    "activityName": "“AI 技术前沿” 学术分享会",
+    "clubName": "人工智能协会",
+    "activityTime": "2024-11-01 15:00-17:30",
+    "activityLocation": "实验楼 B501 报告厅",
+    "activityType": "学术科技类",
+    "signupCount": 98,
+    "status": "1"
+    }
+    ]
+    }

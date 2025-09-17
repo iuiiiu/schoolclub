@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>在线报名</title>
+		<link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css">
+		<style>
+			body {
+				background-color: #f0f2f5;
+				font-family: "Microsoft YaHei", sans-serif;
+			}
+
+			.layui-form {
+				background-color: #fff;
+				padding: 20px;
+				border-radius: 5px;
+				box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+				margin: 20px;
+			}
+
+			.required::before {
+				content: "*";
+				color: #ff5722;
+				margin-right: 4px;
+				font-weight: bold;
+			}
+
+			.layui-form-label {
+				color: #555;
+			}
+
+			.layui-input,
+			.layui-select,
+			.layui-textarea {
+				border-color: #e6e6e6;
+			}
+
+			.layui-input:focus,
+			.layui-select:focus,
+			.layui-textarea:focus {
+				border-color: #3498db;
+				box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+			}
+
+			.layui-btn-normal {
+				background-color: #3d89db;
+				border-color: #3498db;
+			}
+
+			.layui-btn-normal:hover {
+				background-color: #2980b9;
+				border-color: #2980b9;
+			}
+
+			.jumpdl {
+				display: block;
+				padding-left: 70px;
+			}
+
+			.login-link a {
+				color: #5FB878;
+				text-decoration: none;
+				font-weight: 500;
+			}
+
+			.layui-btn {
+				background-color: #b9efef;
+				color: #62523e;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="layui-form">
+			<div class="layui-form-item">
+				<label class="layui-form-label required">选择活动</label>
+				<div class="layui-input-block">
+					<select lay-verify="required">
+						<option value="校园音乐节">校园音乐节</option>
+						<option value="科技创新大赛">科技创新大赛</option>
+						<option value="摄影比赛">摄影比赛</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label required">姓名</label>
+				<div class="layui-input-block">
+					<input type="text" name="username" class="layui-input" lay-verify="required" lay-reqtext="活动标题不能为空!"
+						placeholder="请输入姓名">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label required">学号</label>
+				<div class="layui-input-block">
+					<input type="text" name="username" class="layui-input" lay-verify="required" lay-reqtext="活动标题不能为空!"
+						placeholder="请输入学号">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label required">手机号</label>
+				<div class="layui-input-block">
+					<input type="number" name="username" class="layui-input" lay-verify="required"
+						lay-reqtext="活动标题不能为空!" placeholder="请输入手机号">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label required">邮箱</label>
+				<div class="layui-input-block">
+					<input type="number" name="phone" class="layui-input" lay-verify="required" lay-reqtext="邮箱不能为空!">
+				</div>
+			</div>
+			
+			<div class="layui-form-item">
+						<label class="layui-form-label">备注</label>
+						<div class="layui-input-block">
+							<textarea   name="remark" class="layui-textarea" placeholder="请输入备注信息"></textarea>
+						</div>
+					</div> 
+
+			<div class="jumpdl">
+				<div class="layui-btn-container">
+					<button type="button" class="layui-btn" lay-submit lay-filter="saveBtn">在线报名</button>
+				</div>
+			</div>
+		</div>
+
+		<script src="../lib/layui-v2.6.3/layui.js"></script>
+		<script>
+			layui.use(['form'], function() {
+				var form = layui.form;
+
+				form.on('submit(saveBtn)', function(data) {
+					console.log(data.field);
+					// 这里可以添加表单提交的逻辑，比如 Ajax 提交
+					return false; // 阻止表单跳转提交
+				});
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>满意度调查</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui@2.6.8/dist/css/layui.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: "Microsoft YaHei", sans-serif;
+            color: #333;
+        }
+		.required::before {
+		    content: "*";
+		    color: #ff5722;
+		    margin-right: 4px;
+		    font-weight: bold;
+		}
+        .main-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        .left-nav {
+            width: 220px;
+            background-color: #fff;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+        }
+        .right-content {
+            flex: 1;
+            margin-left: 220px;
+            padding: 20px;
+        }
+        .header {
+            background-color: white;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e6e6e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .logo {
+            padding: 20px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .nav-menu {
+            padding: 15px 0;
+        }
+        .nav-item {
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            color: #555;
+        }
+        .nav-item:hover {
+            background-color: #f8f8f8;
+            color: #333;
+        }
+        .nav-item.active {
+            background-color: #f8f8f8;
+            border-left: 4px solid #009688;
+            color: #009688;
+        }
+        .nav-item i {
+            margin-right: 10px;
+            font-size: 16px;
+        }
+        .sub-nav {
+            background-color: #fafafa;
+            padding-left: 10px;
+        }
+        .sub-nav-item {
+            padding: 12px 20px 12px 40px;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #009688;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+            font-weight: bold;
+        }
+        .tabs {
+            margin: 20px 0;
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 10px 20px;
+        }
+        .tab {
+            display: inline-block;
+            padding: 8px 20px;
+            margin-right: 5px;
+            cursor: pointer;
+            border-radius: 3px;
+            color: #555;
+        }
+        .tab.active {
+            background-color: #009688;
+            color: white;
+        }
+        .card {
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        .survey-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+        .survey-title i {
+            margin-right: 10px;
+            color: #009688;
+        }
+        .question-item {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #e6e6e6;
+        }
+        .question-text {
+            font-size: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .question-text i {
+            margin-right: 10px;
+            color: #FF5722;
+        }
+        .rating-options {
+            display: flex;
+            justify-content: space-between;
+            max-width: 600px;
+        }
+        .rating-option {
+            text-align: center;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: all 0.3s;
+            border: 1px solid #eee;
+        }
+        .rating-option:hover {
+            background-color: #f8f8f8;
+            border-color: #ddd;
+        }
+        .rating-option.selected {
+            background-color: #009688;
+            color: white;
+            border-color: #009688;
+        }
+        .rating-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .rating-text {
+            font-size: 14px;
+        }
+        .btn-submit {
+            background-color: #009688;
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        .btn-submit i {
+            margin-right: 8px;
+        }
+        .btn-submit:hover {
+            background-color: #007d66;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+            font-size: 14px;
+            margin-top: 30px;
+        }
+        .layui-form-item {
+            margin-bottom: 20px;
+        }
+        .layui-form-label {
+            width: 120px;
+        }
+        .layui-input-block {
+            margin-left: 150px;
+        }
+    </style>
+</head>
+<body>
+    
+            <!-- 调查内容 -->
+            <div class="card">
+                <div class="survey-title">
+                    <i class="fas fa-clipboard-list"></i> 2023秋季社团活动满意度调查
+                </div>
+                <form class="layui-form">
+                    <!-- 选择社团 -->
+                    <div class="layui-form-item">
+                        <label class="layui-form-label required">参与社团</label>
+                        <div class="layui-input-block">
+                            <select name="club" lay-verify="required">
+                                <option value="">请选择参与的社团</option>
+                                <option value="music">音乐社</option>
+                                <option value="sports">体育社</option>
+                                <option value="literature">文学社</option>
+                                <option value="tech">科技社</option>
+                                <option value="art">美术社</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- 选择活动 -->
+                    <div class="layui-form-item">
+                        <label class="layui-form-label required">参与活动</label>
+                        <div class="layui-input-block">
+                            <select name="activity" lay-verify="required">
+                                <option value="">请选择参与的活动</option>
+                                <option value="concert">校园音乐会</option>
+                                <option value="basketball">篮球友谊赛</option>
+                                <option value="poetry">诗歌朗诵会</option>
+                                <option value="robot">机器人制作大赛</option>
+                                <option value="exhibition">美术作品展</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- 问题1 -->
+                    <div class="question-item">
+                        <div class="question-text">
+                            <i class="fas fa-chart-line"></i> 您对本次社团活动的整体组织情况满意吗？
+                        </div>
+                        <div class="rating-options">
+                            <div class="rating-option">
+                                <div class="rating-icon">😞</div>
+                                <div class="rating-text">非常不满意</div>
+                            </div>
+                            <div class="rating-option">
+                                <div class="rating-icon">😕</div>
+                                <div class="rating-text">不满意</div>
+                            </div>
+                            <div class="rating-option">
+                                <div class="rating-icon">😐</div>
+                                <div class="rating-text">一般</div>
+                            </div>
+                            <div class="rating-option">
+                                <div class="rating-icon">🙂</div>
+                                <div class="rating-text">满意</div>
+                            </div>
+                            <div class="rating-option selected">
+                                <div class="rating-icon">😄</div>
+                                <div class="rating-text">非常满意</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 问题2 -->
+                    <div class="question-item">
+                        <div class="question-text">
+                            <i class="fas fa-microphone"></i> 您对活动主讲人的表现满意吗？
+                        </div>
+                        <div class="rating-options">
+                            <div class="rating-option">
+                                <div class="rating-icon">😞</div>
+                                <div class="rating-text">非常不满意</div>
+                            </div>
+                            <div class="rating-option">
+                                <div class="rating-icon">😕</div>
+                                <div class="rating-text">不满意</div>
+                            </div>
+                            <div class="rating-option">
+                                <div class="rating-icon">😐</div>
+                                <div class="rating-text">一般</div>
+                            </div>
+                            <div class="rating-option selected">
+                                <div class="rating-icon">🙂</div>
+                                <div class="rating-text">满意</div>
+                            </div>
+                            <div class="rating-option">
+                                <div class="rating-icon">😄</div>
+                                <div class="rating-text">非常满意</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 问题3 -->
+                    <div class="question-item">
+                        <div class="question-text">
+                            <i class="fas fa-clock"></i> 您对活动的时间安排满意吗？
+                        </div>
+                        <div class="rating-options">
+                            <div class="rating-option">
+                                <div class="rating-icon">😞</div>
+                                <div class="rating-text">非常不满意</div>
+                            </div>
+                            <div class="rating-option">
+                                <div class="rating-icon">😕</div>
+                                <div class="rating-text">不满意</div>
+                            </div>
+                            <div class="rating-option selected">
+                                <div class="rating-icon">😐</div>
+                                <div class="rating-text">一般</div>
+                            </div>
+                            <div class="rating-option">
+                                <div class="rating-icon">🙂</div>
+                                <div class="rating-text">满意</div>
+                            </div>
+                            <div class="rating-option">
+                                <div class="rating-icon">😄</div>
+                                <div class="rating-text">非常满意</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 问题4 -->
+                    <div class="question-item">
+                        <div class="question-text">
+                            <i class="fas fa-users"></i> 您对活动中的互动环节满意吗？
+                        </div>
+                        <div class="rating-options">
+                            <div class="rating-option">
+                                <div class="rating-icon">😞</div>
+                                <div class="rating-text">非常不满意</div>
+                            </div>
+                            <div class="rating-option">
+                                <div class="rating-icon">😕</div>
+                                <div class="rating-text">不满意</div>
+                            </div>
+                            <div class="rating-option">
+                                <div class="rating-icon">😐</div>
+                                <div class="rating-text">一般</div>
+                            </div>
+                            <div class="rating-option">
+                                <div class="rating-icon">🙂</div>
+                                <div class="rating-text">满意</div>
+                            </div>
+                            <div class="rating-option selected">
+                                <div class="rating-icon">😄</div>
+                                <div class="rating-text">非常满意</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 问题5 -->
+                    <div class="question-item">
+                        <div class="question-text">
+                            <i class="fas fa-graduation-cap"></i> 本次活动是否满足了您的期望？
+                        </div>
+                        <div class="rating-options">
+                            <div class="rating-option">
+                                <div class="rating-icon">😞</div>
+                                <div class="rating-text">非常不满意</div>
+                            </div>
+                            <div class="rating-option">
+                                <div class="rating-icon">😕</div>
+                                <div class="rating-text">不满意</div>
+                            </div>
+                            <div class="rating-option">
+                                <div class="rating-icon">😐</div>
+                                <div class="rating-text">一般</div>
+                            </div>
+                            <div class="rating-option">
+                                <div class="rating-icon">🙂</div>
+                                <div class="rating-text">满意</div>
+                            </div>
+                            <div class="rating-option selected">
+                                <div class="rating-icon">😄</div>
+                                <div class="rating-text">非常满意</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 提交按钮 -->
+					<button type="button" class="layui-btn" lay-submit lay-filter="saveBtn"><i class="fas fa-paper-plane"></i> 提交调查</button>
+                </form>
+            </div>
+            <div class="footer">
+                <p>© 2023 青衿Event - 校园社团活动管理平台</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/layui@2.6.8/dist/layui.js"></script>
+    <script>
+        layui.use(['form', 'layer'], function(){
+            var form = layui.form;
+            var layer = layui.layer;
+
+            // 评分选项点击事件
+            document.querySelectorAll('.rating-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    // 清除同级元素的选中状态
+                    const siblings = this.parentElement.children;
+                    for (let sibling of siblings) {
+                        sibling.classList.remove('selected');
+                    }
+                    // 设置当前元素为选中状态
+                    this.classList.add('selected');
+                });
+            });
+
+            // 提交按钮点击事件
+            document.querySelector('.btn-submit').addEventListener('click', function() {
+                layer.msg('感谢您的反馈！调查已提交', {icon: 1});
+            });
+        });
+    </script>
+</body>
+</html>

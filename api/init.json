@@ -1,0 +1,148 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "href": "page/home.html"
+  },
+  "logoInfo": {
+    "title": "校园社团平台",
+    "image": "images/logo1.png",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "常规管理",
+      "icon": "fa fa-address-book",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "首页",
+          "href": "page/home.html",
+          "icon": "fa fa-home",
+          "target": "_self"
+        },
+        {
+          "title": "用户管理",
+          "href": "",
+          "icon": "fa fa-group",
+          "target": "_self",
+          "child": [
+          {
+            "title": "用户注册",
+            "href": "UserManage/UserRegister.html",
+            "icon": "fa fa-user-plus",
+            "target": "_self"
+          }, {
+            "title": "用户登录",
+            "href": "UserManage/UserLogin.html",
+            "icon": "fa fa-paper-plane-o",
+            "target": "_self"
+          }, {
+            "title": "个人信息管理",
+            "href": "UserManage/UserInfomanage.html",
+            "icon": "fa fa-id-card-o",
+            "target": "_self"
+          }
+        ]
+        },
+        {
+          "title": "社团管理",
+          "href": "",
+          "icon": "fa fa-institution",
+          "target": "_self",
+          "child": [
+            {
+              "title": "社团创建",
+              "href": "ClubManage/ClubCreate.html",
+              "icon": "fa fa-thumb-tack",
+              "target": "_self"
+            }, {
+              "title": "社团编辑",
+              "href": "ClubManage/ClubEdit.html",
+              "icon": "fa fa-spinner",
+              "target": "_self"
+            }, {
+              "title": "社团展示",
+              "href": "ClubManage/ClubShow.html",
+              "icon": "fa fa-smile-o",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "活动管理",
+          "href": "",
+          "icon": "fa fa-male",
+          "target": "_self",
+          "child": [
+            {
+              "title": "活动发布",
+              "href": "ActivityManage/ActivityRelease.html",
+              "icon": "fa fa-reply-all",
+              "target": "_self"
+            }, {
+              "title": "活动编辑",
+              "href": "ActivityManage/ActivityEdit.html",
+              "icon": "fa fa-sliders",
+              "target": "_self"
+            }, {
+              "title": "活动查询",
+              "href": "ActivityManage/ActivityInquiry.html",
+              "icon": "fa fa-question-circle-o",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "报名管理",
+          "href": "",
+          "icon": "fa fa-trophy",
+          "target": "_self",
+          "child": [
+            {
+              "title": "在线报名",
+              "href": "RegistrateManage/OnlineRegistrate.html",
+              "icon": "fa fa-handshake-o",
+              "target": "_self"
+            }, {
+              "title": "报名审核",
+              "href": "RegistrateManage/CheckinManage.html",
+              "icon": "fa fa-search",
+              "target": "_self"
+            }, {
+              "title": "签到管理",
+			  "href": "RegistrateManage/RegistrateReview.html",
+              "icon": "fa fa-edit",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "反馈评价",
+          "href": "",
+          "icon": "fa fa-paw",
+          "target": "_self",
+          "child": [
+            {
+              "title": "活动评价",
+              "href": "FeedbackEva/ActivityEval.html",
+              "icon": "fa fa-child",
+              "target": "_self"
+            }, {
+              "title": "满意度调查",
+              "href": "FeedbackEva/SatisSurvey.html",
+              "icon": "fa fa-thumbs-o-up",
+              "target": "_self"
+            }, {
+              "title": "建议反馈",
+              "href": "FeedbackEva/Suggestion.html",
+              "icon": "fa fa-comments-o",
+              "target": "_self"
+            }
+          ]
+        }
+        
+      ]
+    }
+  ]
+}

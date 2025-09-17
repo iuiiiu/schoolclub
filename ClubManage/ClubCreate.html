@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>社团创建</title>
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css">
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        .layui-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+            margin: 20px;
+        }
+        .required::before {
+            content: "*";
+            color: #ff5722;
+            margin-right: 4px;
+            font-weight: bold;
+        }
+        .layui-form-label {
+            color: #555;
+        }
+        .layui-input, .layui-select, .layui-textarea {
+            border-color: #e6e6e6;
+        }
+        .layui-input:focus, .layui-select:focus, .layui-textarea:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+        .layui-btn-normal {
+            background-color: #3d89db;
+            border-color: #3498db;
+        }
+        .layui-btn-normal:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+		.jumpdl{
+			display: block;
+			padding-left: 70px;
+		}
+		.login-link a {
+		    color: #5FB878; 
+		    text-decoration: none;
+		    font-weight: 500;
+		}
+		.layui-btn{
+			background-color: #b9efef;
+			color:#62523e;
+		}
+    </style>
+</head>
+<body>
+    <div class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label required">社团名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="username" class="layui-input" lay-verify="required"
+                    lay-reqtext="社团名称不能为空!" placeholder="请输入社团名称">
+            </div>
+        </div>
+		
+		<div class="layui-form-item">
+		    <label class="layui-form-label required">社团Logo</label>
+		    <div class="layui-input-block">
+		         <input type="file" id="clubLogo" class="layui-input">
+		    </div>
+		</div>
+		
+        <div class="layui-form-item">
+            <label class="layui-form-label required">社团分类</label>
+            <div class="layui-input-block">
+                <select lay-verify="required">
+                    <option value="学术科技">学术科技</option>
+                    <option value="文化艺术">文化艺术</option>
+                    <option value="体育健身">体育健身</option>
+					<option value="公益实践">公益实践</option>
+                </select>
+            </div>
+        </div>
+		
+		<div class="layui-form-item">
+		    <label class="layui-form-label required">社长</label>
+		    <div class="layui-input-block">
+		        <input type="text" name="username" class="layui-input" lay-verify="required"
+		            lay-reqtext="社长不能为空!" placeholder="请输入社长">
+		    </div>
+		</div>
+		
+		<div class="layui-form-item">
+		    <label class="layui-form-label required">指导老师</label>
+		    <div class="layui-input-block">
+		        <input type="text" name="username" class="layui-input" lay-verify="required"
+		            lay-reqtext="指导老师不能为空!" placeholder="请输入指导老师">
+		    </div>
+		</div>
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label">社团简介</label>
+			<div class="layui-input-block">
+				<textarea   name="remark" class="layui-textarea" placeholder="请输入社团简介"></textarea>
+			</div>
+		</div> 
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label">主要活动</label>
+			<div class="layui-input-block">
+				<textarea   name="remark" class="layui-textarea" placeholder="请输入社团主要活动"></textarea>
+			</div>
+		</div> 
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label">加入方式</label>
+			<div class="layui-input-block">
+				<textarea   name="remark" class="layui-textarea" placeholder="每学期初招新，关注学校公告或直接联系社长。"></textarea>
+			</div>
+		</div> 
+		
+		<div class="jumpdl">
+		    <div class="layui-btn-container">
+		      <button type="button" class="layui-btn" lay-submit lay-filter="saveBtn">创建社团</button>
+		    </div>
+		</div>
+    </div>
+	
+    <script src="../lib/layui-v2.6.3/layui.js"></script>
+    <script>
+        layui.use(['form'], function () {
+            var form = layui.form;
+
+            form.on('submit(saveBtn)', function (data) {
+                console.log(data.field);
+                // 这里可以添加表单提交的逻辑，比如 Ajax 提交
+                return false; // 阻止表单跳转提交
+            });
+        });
+    </script>
+</body>
+</html>

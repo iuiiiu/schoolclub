@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>签到管理</title>
+    <link rel="stylesheet" href="../css/layuimini.css" media="all">
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
+    <script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="../js/layuimini.js" charset="utf-8"></script>
+    <style>
+        .sign-status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #fff;
+        }
+        .status-success { background-color: #52C41A; }
+        .status-fail { background-color: #F5222D; }
+        .status-unknown { background-color: #FFB800; }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layuimini-main">
+    <div class="layui-card">
+        <div class="layui-card-header">签到记录筛选</div>
+        <div class="layui-card-body">
+            <form class="layui-form" lay-filter="signSearchForm">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">社团名称</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="clubName" placeholder="请输入社团名称" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">活动名称</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="activityName" placeholder="请输入活动名称" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">学生姓名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="studentName" placeholder="请输入姓名" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">签到状态</label>
+                        <div class="layui-input-inline">
+                            <select name="signStatus">
+                                <option value="">全部状态</option>
+                                <option value="success">签到成功</option>
+                                <option value="fail">签到失败</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">签到时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" id="signTimeRange" placeholder="选择时间范围">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-normal" type="submit">搜索</button>
+                        <button class="layui-btn layui-btn-primary" type="reset">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="layui-card">
+        <div class="layui-card-header">
+            <div class="layui-btn-group">
+                <button class="layui-btn layui-btn-sm layui-btn-normal" id="addSignBtn">添加签到记录</button>
+                <button class="layui-btn layui-btn-sm layui-btn-primary" id="exportSignBtn">导出签到数据</button>
+                <button class="layui-btn layui-btn-sm layui-btn-primary" id="refreshSignBtn">刷新列表</button>
+            </div>
+        </div>
+        <div class="layui-card-body">
+            <table class="layui-hide" id="signTable" lay-filter="signTableFilter"></table>
+
+            <script type="text/html" id="signOperationTpl">
+                <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="view">查看</a>
+                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">删除</a>
+            </script>
+
+            <script type="text/html" id="signStatusTpl">
+                {{#  if(d.signStatus === 'success'){ }}
+                    <span class="sign-status status-success">签到成功</span>
+                {{#  } else if(d.signStatus === 'fail'){ }}
+                    <span class="sign-status status-fail">签到失败</span>
+                {{#  } else { }}
+                    <span class="sign-status status-unknown">状态未知</span>
+                {{#  } }}
+            </script>
+        </div>
+    </div>
+
+    <div id="signModal" style="display: none;">
+        <form class="layui-form layui-form-pane" lay-filter="signEditForm" style="padding: 20px;">
+            <input type="hidden" name="signId">
+            <div class="layui-form-item">
+                <label class="layui-form-label">社团名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="clubName" required lay-verify="required" placeholder="请输入社团名称" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">活动名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="activityName" required lay-verify="required" placeholder="请输入活动名称" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">学生姓名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="studentName" required lay-verify="required" placeholder="请输入学生姓名" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">学号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="studentNo" required lay-verify="required" placeholder="请输入学生学号" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">签到状态</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="signStatus" value="success" title="签到成功" checked>
+                    <input type="radio" name="signStatus" value="fail" title="签到失败">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">签到时间</label>
+                <div class="layui-input-block">
+                    <input type="text" name="signTime" id="signTimeInput" required lay-verify="required" placeholder="选择签到时间" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">失败原因</label>
+                <div class="layui-input-block">
+                    <textarea name="failReason" placeholder="签到失败时请输入原因" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <button class="layui-btn layui-btn-normal" type="submit">提交</button>
+                <button class="layui-btn layui-btn-primary" type="button" id="closeModalBtn">取消</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="signDetailModal" style="display: none; padding: 20px;">
+        <table class="layui-table" style="margin: 0;">
+            <colgroup>
+                <col width="120">
+                <col width="auto">
+            </colgroup>
+            <tbody>
+                <tr><td>签到ID</td><td id="detailSignId">-</td></tr>
+                <tr><td>社团名称</td><td id="detailClubName">-</td></tr>
+                <tr><td>活动名称</td><td id="detailActivityName">-</td></tr>
+                <tr><td>学生姓名</td><td id="detailStudentName">-</td></tr>
+                <tr><td>学号</td><td id="detailStudentNo">-</td></tr>
+                <tr><td>签到状态</td><td id="detailSignStatus">-</td></tr>
+                <tr><td>签到时间</td><td id="detailSignTime">-</td></tr>
+                <tr><td>失败原因</td><td id="detailFailReason">-</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+layui.use(['form', 'table', 'laydate', 'layer', 'jquery'], function () {
+    var form = layui.form,
+        table = layui.table,
+        laydate = layui.laydate,
+        layer = layui.layer,
+        $ = layui.jquery;
+
+    laydate.render({
+        elem: '#signTimeRange',
+        range: true
+    });
+
+    laydate.render({
+        elem: '#signTimeInput',
+        type: 'datetime'
+    });
+
+    var mockSignData = [
+        {signId: 1, clubName: '计算机协会', activityName: '编程讲座', studentName: '张三', studentNo: '2023001', signStatus: 'success', signTime: '2024-10-01 09:30:00', failReason: ''},
+        {signId: 2, clubName: '音乐社', activityName: '歌手大赛', studentName: '李四', studentNo: '2023002', signStatus: 'fail', signTime: '2024-10-02 14:00:00', failReason: '未带有效证件'},
+        {signId: 3, clubName: '篮球社', activityName: '篮球比赛', studentName: '王五', studentNo: '2023003', signStatus: 'success', signTime: '2024-10-03 16:00:00', failReason: ''},
+        {signId: 4, clubName: '文学社', activityName: '诗歌朗诵会', studentName: '赵六', studentNo: '2023004', signStatus: 'fail', signTime: '2024-10-04 19:00:00', failReason: '迟到超过30分钟'},
+        {signId: 5, clubName: '摄影协会', activityName: '摄影展', studentName: '孙七', studentNo: '2023005', signStatus: 'success', signTime: '2024-10-05 10:00:00', failReason: ''}
+    ];
+
+    function renderSignTable(filterData = []) {
+        table.render({
+            elem: '#signTable',
+            data: filterData.length > 0 ? filterData : mockSignData,
+            page: true,
+            limit: 5,
+            limits: [5, 10, 15],
+            cols: [[
+                {type: 'checkbox', width: 50},
+                {field: 'signId', width: 80, title: '签到ID', sort: true},
+                {field: 'clubName', width: 160, title: '社团名称'},
+                {field: 'activityName', width: 220, title: '活动名称'},
+                {field: 'studentName', width: 100, title: '学生姓名'},
+                {field: 'studentNo', width: 120, title: '学号'},
+                {field: 'signStatus', width: 100, title: '签到状态', templet: '#signStatusTpl', align: 'center'},
+                {field: 'signTime', width: 200, title: '签到时间'},
+                {title: '操作', width: 160, templet: '#signOperationTpl', align: 'center'}
+            ]],
+            skin: 'line'
+        });
+    }
+
+    renderSignTable();
+
+    form.on('submit(signSearchForm)', function(data) {
+        var field = data.field;
+        var filterResult = mockSignData.filter(item => {
+            if (field.clubName && !item.clubName.includes(field.clubName)) return false;
+            if (field.activityName && !item.activityName.includes(field.activityName)) return false;
+            if (field.studentName && !item.studentName.includes(field.studentName)) return false;
+            if (field.signStatus && item.signStatus !== field.signStatus) return false;
+            return true;
+        });
+        renderSignTable(filterResult);
+        layer.msg('筛选完成，共找到' + filterResult.length + '条记录', {icon: 1});
+        return false;
+    });
+
+    $('#resetSearchBtn').on('click', function() {
+        form.val('signSearchForm', {
+            'clubName': '',
+            'activityName': '',
+            'studentName': '',
+            'signStatus': ''
+        });
+        $('#signTimeRange').val('');
+        renderSignTable();
+    });
+
+    $('#refreshSignBtn').on('click', function() {
+        renderSignTable();
+        layer.msg('列表已刷新', {icon: 1});
+    });
+
+    $('#exportSignBtn').on('click', function() {
+        layer.msg('模拟导出签到数据', {icon: 1});
+    });
+
+    table.on('tool(signTableFilter)', function(obj) {
+        var data = obj.data;
+        if (obj.event === 'view') {
+            $('#detailSignId').text(data.signId);
+            $('#detailClubName').text(data.clubName);
+            $('#detailActivityName').text(data.activityName);
+            $('#detailStudentName').text(data.studentName);
+            $('#detailStudentNo').text(data.studentNo);
+            $('#detailSignStatus').html(
+                data.signStatus === 'success' ? '<span class="sign-status status-success">签到成功</span>' : 
+                data.signStatus === 'fail' ? '<span class="sign-status status-fail">签到失败</span>' : 
+                '<span class="sign-status status-unknown">状态未知</span>'
+            );
+            $('#detailSignTime').text(data.signTime || '无');
+            $('#detailFailReason').text(data.failReason || '无');
+            layer.open({
+                type: 1,
+                title: '签到详情',
+                area: ['500px', '400px'],
+                content: $('#signDetailModal'),
+                shade: 0.2,
+                btn: ['关闭']
+            });
+        } else if (obj.event === 'edit') {
+            form.val('signEditForm', {
+                'signId': data.signId,
+                'clubName': data.clubName,
+                'activityName': data.activityName,
+                'studentName': data.studentName,
+                'studentNo': data.studentNo,
+                'signStatus': data.signStatus,
+                'signTime': data.signTime || '',
+                'failReason': data.failReason || ''
+            });
+            layer.open({
+                type: 1,
+                title: '编辑签到记录',
+                area: ['600px', '500px'],
+                content: $('#signModal'),
+                shade: 0.2,
+                success: function() {
+                    form.render();
+                }
+            });
+        } else if (obj.event === 'delete') {
+            layer.confirm('确定要删除这条签到记录吗？', {icon: 3}, function(index) {
+                mockSignData = mockSignData.filter(item => item.signId !== data.signId);
+                renderSignTable();
+                layer.close(index);
+                layer.msg('删除成功', {icon: 1});
+            });
+        }
+    });
+
+    $('#addSignBtn').on('click', function() {
+        form.val('signEditForm', {
+            'signId': '',
+            'clubName': '',
+            'activityName': '',
+            'studentName': '',
+            'studentNo': '',
+            'signStatus': 'success',
+            'signTime': '',
+            'failReason': ''
+        });
+        layer.open({
+            type: 1,
+            title: '添加签到记录',
+            area: ['600px', '500px'],
+            content: $('#signModal'),
+            shade: 0.2,
+            success: function() {
+                form.render();
+            }
+        });
+    });
+
+    form.on('submit(signEditForm)', function(data) {
+                var field = data.field;
+                if (field.signId) { // 编辑已有记录
+                    mockSignData = mockSignData.map(item => {
+                        if (item.signId == field.signId) {
+                            return { ...item, ...field };
+                        }
+                        return item;
+                    });
+                    layer.msg('编辑成功', {icon: 1});
+                } else { // 添加新记录
+                    field.signId = mockSignData.length > 0 
+                        ? Math.max(...mockSignData.map(item => item.signId)) + 1 
+                        : 1;
+                    mockSignData.push(field);
+                    layer.msg('添加成功', {icon: 1});
+                }
+                layer.closeAll();
+                renderSignTable();
+                return false;
+            });
+        
+            $('#closeModalBtn').on('click', function() {
+                layer.closeAll();
+            });
+        
+            form.render();
+        });
+        </script>
+        </body>
+        </html>

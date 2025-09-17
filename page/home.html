@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>校园社团活动平台</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <style>
+        /* 青春配色方案 */
+        :root {
+            --primary-color: #ffd8d4;   /* 珊瑚粉 */
+            --secondary-color: #b3ebef; /* 薄荷绿 */
+            --accent-color: #FFD166;   /* 阳光黄 */
+            --dark-color: #4A4E69;     /* 深紫色 */
+            --light-color: #F7F7F7;    /* 浅灰色 */
+        }
+
+        body {
+            background-color: #F9F9F9;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        .layui-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: none;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background-color: white;
+        }
+
+        .layui-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .layui-card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            font-weight: bold;
+            border-radius: 10px 10px 0 0 !important;
+            border: none;
+        }
+
+        .icon {
+            margin-right: 10px;
+            color: white;
+        }
+
+        .layuimini-qiuck-module {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .layuimini-qiuck-module a i {
+            display: inline-block;
+            width: 100%;
+            height: 60px;
+            line-height: 60px;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 30px;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            transition: all 0.3s;
+        }
+
+        .layuimini-qiuck-module a:hover i {
+            background-color: var(--primary-color);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .layuimini-qiuck-module a cite {
+            position: relative;
+            top: 5px;
+            display: block;
+            color: var(--dark-color);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .panel {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            height: 100%;
+        }
+
+        .panel:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .panel-body {
+            padding: 15px;
+        }
+
+        .panel-title h5 {
+            color: var(--dark-color);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .no-margins {
+            color: var(--secondary-color);
+            font-weight: bold;
+            font-size: 28px;
+            margin: 10px 0;
+        }
+
+        .label {
+            display: inline;
+            padding: 0.2em 0.6em;
+            font-size: 75%;
+            font-weight: 700;
+            line-height: 1;
+            color: white;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: 0.5em;
+            margin-top: 0.3em;
+        }
+
+        .layui-bg-blue {
+            background-color: var(--primary-color) !important;
+        }
+
+        .layui-bg-cyan {
+            background-color: var(--secondary-color) !important;
+        }
+
+        .layui-bg-orange {
+            background-color: var(--accent-color) !important;
+        }
+
+        .layui-bg-green {
+            background-color: #06D6A0 !important;
+        }
+
+        .layuimini-notice {
+            padding: 12px 16px;
+            clear: both;
+            font-size: 14px !important;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease-in-out;
+            border-bottom: 1px solid #f0f0f0;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            background-color: white;
+        }
+
+        .layuimini-notice:hover {
+            background-color: #f8f9fa;
+            transform: translateX(5px);
+        }
+
+        .layuimini-notice-title {
+            line-height: 24px;
+            font-size: 15px;
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+
+        .layuimini-notice-extra {
+            position: absolute;
+            top: 50%;
+            margin-top: -8px;
+            right: 16px;
+            display: inline-block;
+            height: 16px;
+            color: #999;
+            font-size: 12px;
+        }
+
+        /* 照片轮播区域 - 宽度100%，高度增加到300px */
+        .photo-slider {
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .slider-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .slider-item {
+            min-width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .slider-controls {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+        }
+
+        .slider-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            margin: 0 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .slider-dot.active {
+            background-color: white;
+            transform: scale(1.2);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .layui-col-md7, .layui-col-md5 {
+                width: 100%;
+            }
+            
+            .photo-slider {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <!-- 照片轮播区域 - 高度增加到300px -->
+        <div class="photo-slider">
+            <div class="slider-container" id="sliderContainer">
+                <div class="slider-item" style="background-image: url('../images/1.jpg');"></div>
+                <div class="slider-item" style="background-image: url('../images/2.jpg');"></div>
+                <div class="slider-item" style="background-image: url('../images/3.jpg');"></div>
+                <div class="slider-item" style="background-image: url('../images/4.jpg');"></div>
+            </div>
+            <div class="slider-controls">
+                <span class="slider-dot active" data-index="0"></span>
+                <span class="slider-dot" data-index="1"></span>
+                <span class="slider-dot" data-index="2"></span>
+                <span class="slider-dot" data-index="3"></span>
+            </div>
+        </div>
+
+        <div class="layui-row layui-col-space15">
+            <!-- 常规管理栏宽度调整为7列 -->
+            <div class="layui-col-md7">
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-col-md6">
+                        <div class="layui-card">
+                            <div class="layui-card-header"><i class="fa fa-chart-line icon"></i>数据统计</div>
+                            <div class="layui-card-body">
+                                <div class="welcome-module">
+                                    <div class="layui-row layui-col-space10">
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <span class="label pull-right layui-bg-blue">实时</span>
+                                                        <h5>社团统计</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins">31</h1>
+                                                        <small>当前分类总记录数</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <span class="label pull-right layui-bg-cyan">实时</span>
+                                                        <h5>成员统计</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins">2156</h1>
+                                                        <small>当前分类总记录数</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <span class="label pull-right layui-bg-orange">实时</span>
+                                                        <h5>活动统计</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins">783</h1>
+                                                        <small>当前分类总记录数</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <span class="label pull-right layui-bg-green">实时</span>
+                                                        <h5>已报名统计</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins">9421</h1>
+                                                        <small>当前分类总记录数</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md6">
+                        <div class="layui-card">
+                            <div class="layui-card-header"><i class="fa fa-rocket icon"></i>快捷入口</div>
+                            <div class="layui-card-body">
+                                <div class="welcome-module">
+                                    <div class="layui-row layui-col-space10 layuimini-qiuck">
+                                        <div class="layui-col-xs3 layuimini-qiuck-module">
+                                            <a href="javascript:;" layuimini-content-href="UserManage/UserRegister.html" data-title="用户注册" data-icon="fa fa-university">
+                                                <i class="fa fa-university"></i>
+                                                <cite>用户注册</cite>
+                                            </a>
+                                        </div>
+                                        <div class="layui-col-xs3 layuimini-qiuck-module">
+                                            <a href="javascript:;" layuimini-content-href="UserManage/UserLogin.html" data-title="用户登录" data-icon="fa ffa-group">
+                                                <i class="fa fa-group"></i>
+                                                <cite>用户登录</cite>
+                                            </a>
+                                        </div>
+
+                                        <div class="layui-col-xs3 layuimini-qiuck-module">
+                                            <a href="javascript:;" layuimini-content-href="ClubManage/ClubCreate.html" data-title="社团创建" data-icon="fa fa-user-plus">
+                                                <i class="fa fa-user-plus"></i>
+                                                <cite>社团创建</cite>
+                                            </a>
+                                        </div>
+                                        <div class="layui-col-xs3 layuimini-qiuck-module">
+                                            <a href="javascript:;" layuimini-content-href="ClubManage/ClubShow.html" data-title="社团展示" data-icon="fa fa-pie-chart">
+                                                <i class="fa fa-pie-chart"></i>
+                                                <cite>社团展示</cite>
+                                            </a>
+                                        </div>
+                                        <div class="layui-col-xs3 layuimini-qiuck-module">
+                                            <a href="javascript:;" layuimini-content-href="ActivityManage/ActivityRelease.html" data-title="活动发布" data-icon="fa fa-trophy">
+                                                <i class="fa fa-trophy"></i>
+                                                <cite>活动发布</cite>
+                                            </a>
+                                        </div>
+
+
+                                        <div class="layui-col-xs3 layuimini-qiuck-module">
+                                            <a href="javascript:;" layuimini-content-href="ActivityManage/ActivityInquiry.html" data-title="活动查询" data-icon="fa fa-snowflake-o">
+                                                <i class="fa fa-search"></i>
+                                                <cite>活动查询</cite>
+                                            </a>
+                                        </div>
+                                        <div class="layui-col-xs3 layuimini-qiuck-module">
+                                            <a href="javascript:;" layuimini-content-href="RegistrateManage/OnlineRegistrate.html" data-title="在线报名" data-icon="fa fa-search">
+                                                <i class="fa fa-snowflake-o"></i>
+                                                <cite>在线报名</cite>
+                                            </a>
+                                        </div>
+                                        <div class="layui-col-xs3 layuimini-qiuck-module">
+                                            <a href="javascript:;" layuimini-content-href="FeedbackEva/Suggestion.html" data-title="建议反馈" data-icon="fa fa-bar-chart">
+                                                <i class="fa fa-bar-chart"></i>
+                                                <cite>建议反馈</cite>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧栏宽度调整为5列 -->
+            <div class="layui-col-md5">
+                <div class="layui-card">
+                    <div class="layui-card-header"><i class="fa fa-bullhorn icon"></i>系统公告</div>
+                    <div class="layui-card-body layui-text">
+                        <div class="layuimini-notice">
+                            <div class="layuimini-notice-title">系统将于本周六凌晨2:00-4:00进行维护升级，期间可能无法访问</div>
+                            <div class="layuimini-notice-extra">2024-07-11 23:06</div>
+                        </div>
+                        <div class="layuimini-notice">
+                            <div class="layuimini-notice-title">请所有社团负责人于10月20日前完成本学期活动计划提交。</div>
+                            <div class="layuimini-notice-extra">2024-07-11 12:57</div>
+                        </div>
+                        <div class="layuimini-notice">
+                            <div class="layuimini-notice-title">无人机社团纳新即将结束</div>
+                            <div class="layuimini-notice-extra">2024-07-05 14:28</div>
+                        </div>
+                        <div class="layuimini-notice">
+                            <div class="layuimini-notice-title">ACM实验室纳新需求</div>
+                            <div class="layuimini-notice-extra">2024-07-04 11:02</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script>
+    layui.use(['layer', 'miniTab'], function () {
+        var $ = layui.jquery,
+            layer = layui.layer,
+            miniTab = layui.miniTab;
+
+        miniTab.listen();
+
+        // 照片轮播功能
+        var currentSlide = 0;
+        var slides = document.querySelectorAll('.slider-item');
+        var dots = document.querySelectorAll('.slider-dot');
+        var sliderContainer = document.getElementById('sliderContainer');
+        
+        function showSlide(index) {
+            currentSlide = index;
+            sliderContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            // 更新指示点状态
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+        }
+        
+        // 点击指示点切换图片
+        dots.forEach(dot => {
+            dot.addEventListener('click', function() {
+                showSlide(parseInt(this.dataset.index));
+            });
+        });
+        
+        // 自动轮播
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }, 3000);
+
+        /**
+         * 查看公告信息
+         **/
+        $('body').on('click', '.layuimini-notice', function () {
+            var title = $(this).children('.layuimini-notice-title').text(),
+                noticeTime = $(this).children('.layuimini-notice-extra').text(),
+                content = $(this).children('.layuimini-notice-content').html();
+            var html = '<div style="padding:15px 20px; text-align:justify; line-height: 22px;border-bottom:1px solid #e2e2e2;background-color: #2f4056;color: #ffffff">\n' +
+                '<div style="text-align: center;margin-bottom: 20px;font-weight: bold;border-bottom:1px solid #718fb5;padding-bottom: 5px"><h4 class="text-danger">' + title + '</h4></div>\n' +
+                '<div style="font-size: 12px">' + content + '</div>\n' +
+                '</div>\n';
+            parent.layer.open({
+                type: 1,
+                title: '系统公告'+'<span style="float: right;right: 1px;font-size: 12px;color: #b1b3b9;margin-top: 1px">'+noticeTime+'</span>',
+                area: '300px;',
+                shade: 0.8,
+                id: 'layuimini-notice',
+                btn: ['查看', '取消'],
+                btnAlign: 'c',
+                moveType: 1,
+                content:html,
+                success: function (layero) {
+                    var btn = layero.find('.layui-layer-btn');
+                    btn.find('.layui-layer-btn0').attr({
+                        href: 'https://gitee.com/zhongshaofa/layuimini',
+                        target: '_blank'
+                    });
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

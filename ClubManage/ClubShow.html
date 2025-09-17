@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>社团展示</title>
+  <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css">
+  <style>
+    body {
+      background-color: #f5f7fa;
+      font-family: "Microsoft YaHei", sans-serif;
+    }
+
+    .club-card {
+      margin: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .club-card:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      transform: translateY(-5px);
+    }
+
+    .carousel-container {
+      height: 200px;
+      overflow: hidden;
+    }
+
+    .club-info {
+      padding: 15px;
+      background-color: #fff;
+    }
+
+    .club-name {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .club-type {
+      display: inline-block;
+      padding: 2px 8px;
+      background-color: #e6f7ff;
+      color: #1890ff;
+      border-radius: 4px;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .club-leader,
+    .club-teacher {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 5px;
+    }
+
+    .layui-btn-normal {
+      background-color: #3d89db;
+      border-color: #3498db;
+    }
+
+    .layui-btn-normal:hover {
+      background-color: #2980b9;
+      border-color: #2980b9;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layui-container">
+    <div class="layui-row">
+      <!-- 社团卡片1 -->
+      <div class="layui-col-md4 club-card">
+        <div class="carousel-container">
+          <div class="layui-carousel" id="carousel1">
+            <div carousel-item>
+              <div><img src="../images/2.1.1.png" alt="计算机协会" style="width: 100%; height: 200px; object-fit: cover;"></div>
+              <div><img src="../images/2.1.2.png" alt="计算机协会活动" style="width: 100%; height: 200px; object-fit: cover;"></div>
+              <div><img src="../images/2.1.3.png" alt="计算机协会成员" style="width: 100%; height: 200px; object-fit: cover;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="club-info">
+          <div class="club-name">计算机协会</div>
+          <div class="club-type">学术科技</div>
+          <div class="club-leader">社长：张三</div>
+          <div class="club-teacher">指导老师：李老师</div>
+          <button class="layui-btn layui-btn-xs layui-btn-normal" style="margin-top: 10px;">查看详情</button>
+        </div>
+      </div>
+
+      <!-- 社团卡片2 -->
+      <div class="layui-col-md4 club-card">
+        <div class="carousel-container">
+          <div class="layui-carousel" id="carousel2">
+            <div carousel-item>
+              <div><img src="../images/2.2.1.png" alt="摄影协会" style="width: 100%; height: 200px; object-fit: cover;"></div>
+              <div><img src="../images/2.2.2.png" alt="摄影协会活动" style="width: 100%; height: 200px; object-fit: cover;"></div>
+              <div><img src="../images/2.2.3.png" alt="摄影协会作品" style="width: 100%; height: 200px; object-fit: cover;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="club-info">
+          <div class="club-name">摄影协会</div>
+          <div class="club-type">兴趣爱好</div>
+          <div class="club-leader">社长：李四</div>
+          <div class="club-teacher">指导老师：王老师</div>
+          <button class="layui-btn layui-btn-xs layui-btn-normal" style="margin-top: 10px;">查看详情</button>
+        </div>
+      </div>
+
+      <!-- 社团卡片3 -->
+      <div class="layui-col-md4 club-card">
+        <div class="carousel-container">
+          <div class="layui-carousel" id="carousel3">
+            <div carousel-item>
+              <div><img src="../images/2.3.1.png" alt="篮球社" style="width: 100%; height: 200px; object-fit: cover;"></div>
+              <div><img src="../images/2.3.2.png" alt="篮球社活动" style="width: 100%; height: 200px; object-fit: cover;"></div>
+              <div><img src="../images/2.3.3.png" alt="篮球社比赛" style="width: 100%; height: 200px; object-fit: cover;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="club-info">
+          <div class="club-name">篮球社</div>
+          <div class="club-type">文化体育</div>
+          <div class="club-leader">社长：王五</div>
+          <div class="club-teacher">指导老师：赵老师</div>
+          <button class="layui-btn layui-btn-xs layui-btn-normal" style="margin-top: 10px;">查看详情</button>
+        </div>
+      </div>
+	  
+	  <!-- 社团卡片4 -->
+	  <div class="layui-col-md4 club-card">
+	    <div class="carousel-container">
+	      <div class="layui-carousel" id="carousel4">
+	        <div carousel-item>
+	          <div><img src="../images/2.4.1.png" alt="吉他社" style="width: 100%; height: 200px; object-fit: cover;"></div>
+	          <div><img src="../images/2.4.2.png" alt="吉他社活动" style="width: 100%; height: 200px; object-fit: cover;"></div>
+	          <div><img src="../images/2.4.3.png" alt="吉他社作品" style="width: 100%; height: 200px; object-fit: cover;"></div>
+	        </div>
+	      </div>
+	    </div>
+	    <div class="club-info">
+	      <div class="club-name">吉他社</div>
+	      <div class="club-type">兴趣爱好</div>
+	      <div class="club-leader">社长：赵六</div>
+	      <div class="club-teacher">指导老师：严老师</div>
+	      <button class="layui-btn layui-btn-xs layui-btn-normal" style="margin-top: 10px;">查看详情</button>
+	    </div>
+	  </div>
+    </div>
+  </div>
+
+  <script src="../lib/layui-v2.6.3/layui.js"></script>
+  <script>
+    layui.use(['carousel'], function () {
+      var carousel = layui.carousel;
+
+      // 轮播初始化-计算机协会
+      carousel.render({
+        elem: '#carousel1',
+        width: '100%',
+        height: '200px',
+        arrow: 'always',
+        interval: 3000
+      });
+
+      // 轮播初始化-摄影协会
+      carousel.render({
+        elem: '#carousel2',
+        width: '100%',
+        height: '200px',
+        arrow: 'always',
+        interval: 3000
+      });
+
+      // 轮播初始化-篮球社
+      carousel.render({
+        elem: '#carousel3',
+        width: '100%',
+        height: '200px',
+        arrow: 'always',
+        interval: 3000
+      });
+	  
+	  // 轮播初始化-吉他社
+	  carousel.render({
+	    elem: '#carousel4',
+	    width: '100%',
+	    height: '200px',
+	    arrow: 'always',
+	    interval: 3000
+	  });
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,85 @@
+{
+  "code": 0,
+  "msg": "success",
+  "count": 18,
+  "data": [
+    {
+      "applyId": 2024011,
+      "activityName": "秋季校园篮球赛总决赛",
+      "clubName": "篮球社",
+      "studentName": "陈十三",
+      "studentDept": "商学院",
+      "signupTime": "2024-10-10 14:20:15",
+      "auditStatus": "pass",
+      "auditRemark": "通过审核，分配至红队",
+      "auditTime": "2024-10-11 09:15:33",
+      "studentPhone": "13800138011",
+      "signupRemark": "司职后卫，有5年打球经验"
+    },
+    {
+      "applyId": 2024012,
+      "activityName": "大学生创业经验分享会",
+      "clubName": "创业孵化社",
+      "studentName": "杨十四",
+      "studentDept": "管理学院",
+      "signupTime": "2024-10-11 09:35:42",
+      "auditStatus": "pass",
+      "auditRemark": "通过审核，安排分享环节发言",
+      "auditTime": "2024-10-11 14:08:22",
+      "studentPhone": "13900139012",
+      "signupRemark": "有校园创业项目经验，想分享团队管理心得"
+    },
+    {
+      "applyId": 2024013,
+      "activityName": "“爱心义卖”资助贫困生活动",
+      "clubName": "志愿者协会",
+      "studentName": "黄十五",
+      "studentDept": "法学院",
+      "signupTime": "2024-10-12 10:18:57",
+      "auditStatus": "pass",
+      "auditRemark": "通过审核，负责义卖摊位管理",
+      "auditTime": "2024-10-12 15:22:11",
+      "studentPhone": "13700137013",
+      "signupRemark": "可全程参与活动组织工作"
+    },
+    {
+      "applyId": 2024014,
+      "activityName": "校园足球赛小组赛",
+      "clubName": "足球社",
+      "studentName": "朱十六",
+      "studentDept": "机械学院",
+      "signupTime": "2024-10-13 08:45:33",
+      "auditStatus": "reject",
+      "auditRemark": "拒绝审核，活动名额已满",
+      "auditTime": "2024-10-13 10:30:45",
+      "studentPhone": "13600136014",
+      "signupRemark": "司职前锋，希望参与小组赛"
+    },
+    {
+      "applyId": 2024015,
+      "activityName": "校园乒乓球单打赛",
+      "clubName": "乒乓球社",
+      "studentName": "秦十七",
+      "studentDept": "材料学院",
+      "signupTime": "2024-10-14 11:25:19",
+      "auditStatus": "pass",
+      "auditRemark": "通过审核，第一轮对阵李同学",
+      "auditTime": "2024-10-14 16:40:37",
+      "studentPhone": "13500135015",
+      "signupRemark": "持有乒乓球二级运动员证书"
+    },
+    {
+      "applyId": 2024016,
+      "activityName": "“心理健康”主题讲座",
+      "clubName": "心理成长社",
+      "studentName": "尤十八",
+      "studentDept": "教育学院",
+      "signupTime": "2024-10-15 13:40:28",
+      "auditStatus": "reject",
+      "auditRemark": "拒绝审核，讲座仅限心理专业学生参与",
+      "auditTime": "2024-10-15 15:10:55",
+      "studentPhone": "13400134016",
+      "signupRemark": "对心理健康教育感兴趣，想学习心理疏导技巧"
+    }
+  ]
+}
